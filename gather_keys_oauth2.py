@@ -43,7 +43,13 @@ class OAuth2Server:
         # Same with redirect_uri hostname and port.
         urlparams = urlparse(self.redirect_uri)
         cherrypy.config.update({'server.socket_host': urlparams.hostname,
-                                'server.socket_port': urlparams.port})
+                                'server.socket_port': urlparams.port
+                                })
+                                #,
+                                #'server.ssl_module': 'builtin',
+                                #'server.ssl_certificate': 'fullchain.pem',
+                                #'server.ssl_private_key': 'privkey.pem'
+                                #})
 
         cherrypy.quickstart(self)
 
