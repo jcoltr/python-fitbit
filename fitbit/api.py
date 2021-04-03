@@ -16,11 +16,14 @@ from . import exceptions
 from .compliance import fitbit_compliance_fix
 from .utils import curry
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class FitbitOauth2Client(object):
     API_ENDPOINT = "https://api.fitbit.com"
     AUTHORIZE_ENDPOINT = "https://www.fitbit.com"
-    API_VERSION = 1
+    API_VERSION = 1.2
 
     request_token_url = "%s/oauth2/token" % API_ENDPOINT
     authorization_url = "%s/oauth2/authorize" % AUTHORIZE_ENDPOINT
@@ -85,6 +88,7 @@ class FitbitOauth2Client(object):
 
         https://dev.fitbit.com/docs/oauth2/#authorization-errors
         """
+        logger.debug(f"Calling API endpoint: {url}")
         data = data or {}
         method = method or ('POST' if data else 'GET')
         response = self._request(
@@ -188,7 +192,7 @@ class Fitbit(object):
     METRIC = 'en_UK'
 
     API_ENDPOINT = "https://api.fitbit.com"
-    API_VERSION = 1
+    API_VERSION = 1.2
     WEEK_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
     PERIODS = ['1d', '7d', '30d', '1w', '1m', '3m', '6m', '1y', 'max']
 
