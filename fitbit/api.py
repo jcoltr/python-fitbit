@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 class FitbitOauth2Client(object):
     API_ENDPOINT = "https://api.fitbit.com"
     AUTHORIZE_ENDPOINT = "https://www.fitbit.com"
-    API_VERSION = 1.2
+    API_VERSION = 1
 
     request_token_url = "%s/oauth2/token" % API_ENDPOINT
     authorization_url = "%s/oauth2/authorize" % AUTHORIZE_ENDPOINT
@@ -192,7 +192,7 @@ class Fitbit(object):
     METRIC = 'en_UK'
 
     API_ENDPOINT = "https://api.fitbit.com"
-    API_VERSION = 1.2
+    API_VERSION = 1
     WEEK_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
     PERIODS = ['1d', '7d', '30d', '1w', '1m', '3m', '6m', '1y', 'max']
 
@@ -215,11 +215,16 @@ class Fitbit(object):
 
     def __init__(self, client_id, client_secret, access_token=None,
             refresh_token=None, expires_at=None, refresh_cb=None,
-            redirect_uri=None, system=US, **kwargs):
+            redirect_uri=None, system=US, api_version_override=None, **kwargs):
         """
         Fitbit(<id>, <secret>, access_token=<token>, refresh_token=<token>)
         """
         self.system = system
+        
+        if api_version_override and api_version_override != self.API_VERSION:
+            logger.debug(f"Overriding version to from: {self.API_VERSION} to: {api_version_override}")
+            self.API_VERSION = api_version_override
+
         self.client = FitbitOauth2Client(
             client_id,
             client_secret,
@@ -228,6 +233,7 @@ class Fitbit(object):
             expires_at=expires_at,
             refresh_cb=refresh_cb,
             redirect_uri=redirect_uri,
+            api_version_override=api_version_override, 
             **kwargs
         )
 
